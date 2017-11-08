@@ -58,10 +58,10 @@ const bfTraversal = (element) => {
   let root = typify({});
 
   let queue = [];
+  // [propName, value, parentType]
   queue.push(["root", element, root]);
 
   while(queue.length > 0){
-    console.log(queue.length);
     let elementTriple = queue.pop();
     console.log("pop", elementTriple);
     let value = elementTriple[1];
@@ -91,11 +91,11 @@ const bfTraversal = (element) => {
   return root;
 }
 
-
 let test = {
   foobar: {
     abc:48.6,
-    dd:[{iam:"happy"}]
+    dd:[{iam:"happy"}],
+    foobar:{"thing":42 }
   },
   pipo:{
     bcd: 38
@@ -104,7 +104,7 @@ let test = {
 
 let test2 = [2, 3];
 
-let target = test2;
+let target = test;
 
 console.log("result", JSON.stringify(bfTraversal(target), null, 2));
-console.log("value", target);
+console.log("value", JSON.stringify(target, null, 2));
