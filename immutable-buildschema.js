@@ -1,5 +1,4 @@
-const { Map, List, Record, isImmutable} = require('immutable');
-
+const { Map, List, Record } = require('immutable');
 
 const SchemaEntities = {
   MapType: Record({
@@ -46,23 +45,19 @@ const EntityExtractors = {
   UndefinedType: JsTypeDetectors.isUndefined
 };
 
-
 function valueToSchemaEntity(value){
   let result = null;
   for(let t in EntityExtractors){
     if(EntityExtractors[t](value)){
-      console.log("found", t);
       result = new SchemaEntities[t]();
-      // TODO: messy
+      // TODO: this is messy refactor
       if(result.get("type") === "Record"){
-        console.log("set descriptive name of record");
         result = result.set('descriptiveName', Record.getDescriptiveName(value));
       }
     }
   }
   return result;
 }
-
 
 // returns a tree of SchemaEntities describing the structure of argument value.
 // Maps and Records are fully traversed
@@ -81,46 +76,30 @@ function buildSchema(value){
                                             entityType.get('type') === 'Record';
 
   while(queue.length > 0){
-    // TODO: butt ugly use object destructuring
-    // or record
     let elementTriple = queue.pop();
-    let value = elementTriple[1];
-    let propName = elementTriple[0];
-    let path = elementTriple[2];
+    [propName, value, path] = elementTriple;
     
+    // console.log("val", value, ",propName", propName, ",path", path); 
     let entity = valueToSchemaEntity(value);
 
     // attach new entity to schema tree
     // update path
     path = path.concat(['items', propName]);
     root = root.setIn(path, entity);
-    
     if(isMapOrRecordType(entity)){
       const entries = entity.get('type') === 'Record' ? Map(value).entries() : value.entries(); 
       for([p, v] of entries){
-        console.log("push", "prop:", p, "value:", v,"path:", path);
+        // console.log("push", "prop:", p, "value:", v,"path:", path);
         queue.push([p, v, path]);
       } 
     }else if(entity.get('type') === "List" && value.size > 0){
-      console.log("array push", "prop:", "index-0", "value:", value.first(), "path:", path);
-      queue.push(["index-0", value.first(), path]);
+      // console.log("array push", "prop:", "0", "value:", value.first(), "path:", path);
+      queue.push(["0", value.first(), path]);
     }
   }
 
   return root.getIn(['items', 'root']);
 }
-
-let m = Map({foo:42, bar:List([null])});
-let R = Record({foo:42, bar:List(), barfoo:Map(m)}, "r-type");
-let m2 = new R();
-
-let target = m2;
-
-let schema = buildSchema(target);
-console.log(schema);
-console.log(target);
-
-console.log(JSON.stringify(schema.toJS(), null, 2));
 
 module.exports = {
   buildSchema: buildSchema
