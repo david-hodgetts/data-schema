@@ -1,15 +1,16 @@
 # data-schema generator
 
-this project aims to provide its users with a means to generate a schema from an Immutable.JS data structure.
+This project aims to provide its users with a means to generate a schema from an Immutable.JS data structure.
 
-The schema is represented with Shema Entity Records (Immutable JS record types).  
+The schema is represented with Schema Entity Records (Immutable JS record types).  
 All entities have a *type* property.   
-Entities representing collections (Map, List, Record for now) have an extra *items* property. This property contains the schema of the collection's children. In the case of a List, only the first element is represented.
+Entities representing collections (Map, List, Record for now) have an extra *items* property. This property contains the schema of the collection's children.  
+In the case of a List, only the first element is represented.  
 Entities representing Records have an extra *descriptiveName* property which contains the Record's descriptive Name.
 
 ## usage
 
-to build a schema use the buildSchema function:
+To build a schema use the buildSchema function:
 
 ```javascript
 const { buildSchema, prettyPrint } = require('data-schema');
