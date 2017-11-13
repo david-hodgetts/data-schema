@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiImmutable = require('chai-immutable');
 const { Map, List, Record, isImmutable} = require('immutable') 
 
-const buildSchema = require('../immutable-buildschema').buildSchema;
+let buildSchema = require('../index').buildSchema;
 
 chai.use(chaiImmutable);
 const expect = chai.expect;

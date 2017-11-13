@@ -1,8 +1,8 @@
 {
-  "name": "traverse",
-  "version": "1.0.0",
-  "description": "",
-  "main": "traverse.js",
+  "name": "data-schema",
+  "version": "0.0.1",
+  "description": "build and manage simple schemas for Immutable.js data structures",
+  "main": "index.js",
   "dependencies": {
     "immutable": "^4.0.0-rc.4"
   },
@@ -14,10 +14,6 @@
   "scripts": {
     "test": "node_modules/.bin/_mocha"
   },
-  "repository": {
-    "type": "git",
-    "url": "david@nomethod.ch:git/js/traverse.git"
-  },
-  "author": "",
-  "license": "ISC"
+  "author": "david hodgetts",
+  "license": "MIT"
 }
